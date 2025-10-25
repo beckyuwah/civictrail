@@ -1,2 +1,2 @@
 # govtracking-app
-This application is to keep citizens up-to-date with pending, oncoming, and completed projects within the State
+A unified app developed to integrate state and federal government projects, enhancing transparency and citizen awareness and engagement in Nigeria
