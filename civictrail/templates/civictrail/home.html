@@ -1,0 +1,348 @@
+{% extends "civictrail/base.html" %}
+{% block title %}Home · Civic Trail{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="py-5 bg-white border-bottom">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <h1 class="display-5 fw-bold">Unified Platform for State & Federal Projects</h1>
+        <p class="lead text-muted">Real-time updates, transparency dashboards, and direct citizen engagement for infrastructure initiatives across all levels of government.</p>
+        <div class="d-flex gap-2">
+          <a href="#projects" class="btn btn-primary">Browse Projects</a>
+          <a href="#engage" class="btn btn-outline-primary">Give Feedback</a>
+        </div>
+        <div class="mt-3 text-secondary small">
+          Last sync: {{ last_sync|default:"—" }}
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="card card-kpi shadow-0">
+                  <div class="card-body">
+                    <div class="text-muted small">Active Projects</div>
+                    <div class="h4 m-0">{{ kpi.active_projects|default:0 }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card card-kpi shadow-0">
+                  <div class="card-body">
+                    <div class="text-muted small">Completed</div>
+                    <div class="h4 m-0">{{ kpi.completed_projects|default:0 }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card card-kpi shadow-0">
+                  <div class="card-body">
+                    <div class="text-muted small">Citizen Feedback</div>
+                    <div class="h4 m-0">{{ kpi.feedback_count|default:0 }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card card-kpi shadow-0">
+                  <div class="card-body">
+                    <div class="text-muted small">Avg. Transparency Score</div>
+                    <div class="h4 m-0">{{ kpi.transparency_score|default:"—" }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="small mt-2 text-muted mb-0">KPIs auto-update as data streams in.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTIVES -->
+<section id="objectives" class="py-5">
+  <div class="container">
+    <h2 class="h3 fw-bold">1.3 Objectives</h2>
+    <ol class="mt-3">
+      <li>Conduct a comprehensive review of existing digital platforms for government project management and citizen engagement.</li>
+      <li>Identify key features and functionalities required for the unified platform.</li>
+      <li>Develop and validate the digital platform.</li>
+      <li>Evaluate the effectiveness of the platform in enhancing transparency and citizen engagement.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- DELIVERABLE -->
+<section id="deliverable" class="py-5 bg-white border-top border-bottom">
+  <div class="container">
+    <h2 class="h3 fw-bold">1.4 Deliverable</h2>
+    <p>A prototype of a unified mobile application integrating state and federal infrastructural projects, providing real-time updates and promoting engagement for citizens and public users.</p>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Integration</h5>
+            <p class="card-text">Single view across state & federal projects with consistent metadata and IDs.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Real-time Updates</h5>
+            <p class="card-text">Streaming progress, milestones, budgets, and schedules in near real time.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Engagement</h5>
+            <p class="card-text">Feedback, issues, polls, and subscriptions to project alerts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER TOOLBAR -->
+<div class="sticky-toolbar">
+  <div class="container py-2">
+    <form method="get" action="#projects" class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label small">Search projects</label>
+        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Road, bridge, hospital..." />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small">Level</label>
+        <select name="level" class="form-select">
+          <option value="">All</option>
+          <option value="state" {% if request.GET.level == 'state' %}selected{% endif %}>State</option>
+          <option value="federal" {% if request.GET.level == 'federal' %}selected{% endif %}>Federal</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small">Status</label>
+        <select name="status" class="form-select">
+          <option value="">Any</option>
+          <option value="planned" {% if request.GET.status == 'planned' %}selected{% endif %}>Planned</option>
+          <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
+          <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex gap-2">
+        <button class="btn btn-primary w-100" type="submit">Apply</button>
+        <a class="btn btn-outline-secondary w-100" href="/">Reset</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- PROJECTS LIST -->
+<section id="projects" class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="h4 fw-bold m-0">Projects</h2>
+      <span class="text-muted small">Showing {{ projects|length }} of {{ total_projects|default:projects|length }}</span>
+    </div>
+
+    {% if projects %}
+      <div class="row g-3">
+        {% for p in projects %}
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h5 class="card-title">{{ p.name }}</h5>
+                  <span class="badge bg-secondary project-badge text-uppercase">{{ p.level }}</span>
+                </div>
+                <p class="card-text small text-muted">{{ p.summary|default:"No description available." }}</p>
+                <ul class="list-unstyled small mb-2">
+                  <li><strong>Status:</strong> {{ p.status|capfirst }}</li>
+                  <li><strong>Budget:</strong> {{ p.budget|default:"—" }}</li>
+                  <li><strong>Last update:</strong> {{ p.updated_at|date:"M d, Y" }}</li>
+                </ul>
+                <div class="progress mb-2" role="progressbar" aria-label="Progress">
+                  <!-- <div class="progress-bar" style="width: {{ p.progress|default:0 }}%">{{ p.progress|default:0 }}%</div>
+                </div> -->
+                <div class="d-flex gap-2">
+                  <a href="{% url 'project_detail' p.slug %}" class="btn btn-sm btn-outline-primary">View</a>
+                  <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#subscribeModal" data-project="{{ p.id }}">Subscribe</button>
+                  <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#feedbackModal" data-project="{{ p.id }}">Feedback</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info">No projects match your filters yet.</div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- TRANSPARENCY & UPDATES -->
+<section id="transparency" class="py-5 bg-white border-top">
+  <div class="container">
+    <h2 class="h4 fw-bold">Transparency & Real-time Updates</h2>
+    <div class="row g-3">
+      {% for u in updates|slice:":6" %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <span class="badge text-bg-light border">{{ u.project_name }}</span>
+            <h5 class="card-title mt-2">{{ u.title }}</h5>
+            <p class="card-text small text-muted">{{ u.body|truncatewords:30 }}</p>
+          </div>
+          <div class="card-footer small text-muted d-flex justify-content-between">
+            <span>{{ u.created_at|date:"M d, Y H:i" }}</span>
+            <span>Status: {{ u.status|capfirst }}</span>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <div class="col-12">
+          <div class="alert alert-secondary">Updates will appear here as data arrives.</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ENGAGEMENT -->
+<section id="engage" class="py-5">
+  <div class="container">
+    <h2 class="h4 fw-bold">Engage</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">Report an Issue</h5>
+            <form method="post" action="{% url 'report_issue' %}">
+              {% csrf_token %}
+              <div class="mb-2">
+                <label class="form-label small">Project</label>
+                <select class="form-select" name="project_id">
+                  {% for p in projects %}
+                    <option value="{{ p.id }}">{{ p.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="mb-2">
+                <label class="form-label small">Description</label>
+                <textarea class="form-control" name="description" rows="3" placeholder="Describe the issue..."></textarea>
+              </div>
+              <button class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+          <div class="card-footer small text-muted">Your report helps improve accountability.</div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">Quick Poll</h5>
+            <form method="post" action="{% url 'vote_poll' %}">
+              {% csrf_token %}
+              <p class="mb-2">Which project category should be prioritized?</p>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="option" value="roads" id="poll1">
+                <label class="form-check-label" for="poll1">Roads & Bridges</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="option" value="health" id="poll2">
+                <label class="form-check-label" for="poll2">Healthcare Facilities</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="option" value="schools" id="poll3">
+                <label class="form-check-label" for="poll3">Schools & Education</label>
+              </div>
+              <button class="btn btn-outline-primary mt-2">Vote</button>
+            </form>
+          </div>
+          <div class="card-footer small text-muted">Aggregated results will be published weekly.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE MODAL -->
+<div class="modal fade" id="subscribeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'subscribe_project' %}" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Subscribe to Project Updates</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="project_id" id="subscribe_project_id">
+        <div class="mb-2">
+          <label class="form-label small">Your Email</label>
+          <input type="email" class="form-control" name="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="realtime" id="rt">
+          <label class="form-check-label" for="rt">Enable real-time push notifications (where supported)</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary">Subscribe</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'submit_feedback' %}" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Submit Feedback</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="project_id" id="feedback_project_id">
+        <div class="mb-2">
+          <label class="form-label small">Message</label>
+          <textarea class="form-control" name="message" rows="3" placeholder="Share your thoughts..."></textarea>
+        </div>
+        <div class="mb-2">
+          <label class="form-label small">Name (optional)</label>
+          <input type="text" class="form-control" name="name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary">Send Feedback</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Pass project id into modals
+  const subscribeModal = document.getElementById('subscribeModal');
+  subscribeModal?.addEventListener('show.bs.modal', event => {
+    const btn = event.relatedTarget;
+    const id = btn?.getAttribute('data-project');
+    document.getElementById('subscribe_project_id').value = id || '';
+  });
+
+  const feedbackModal = document.getElementById('feedbackModal');
+  feedbackModal?.addEventListener('show.bs.modal', event => {
+    const btn = event.relatedTarget;
+    const id = btn?.getAttribute('data-project');
+    document.getElementById('feedback_project_id').value = id || '';
+  });
+</script>
+{% endblock %}
+
