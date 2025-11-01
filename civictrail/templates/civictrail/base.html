@@ -46,7 +46,6 @@
           </a>
         </li>
 
-        Projects
         <li class="nav-item">
           <a class="nav-link" href="{% url 'projects' %}" title="Browse ongoing and completed government projects">
             Projects
@@ -55,15 +54,8 @@
 
         <!-- Engage -->
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'engage' %}" title="Share feedback, participate in polls, or report issues">
-            Engage
-          </a>
-        </li>
-
-        <!-- Transparency -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'transparency' %}" title="View project updates and transparency reports">
-            Transparency
+          <a class="nav-link" href="{% url 'states' %}" title="Browse your state to find local projects and initiatives">
+            States
           </a>
         </li>
 
@@ -100,8 +92,8 @@
 
   <footer class="mt-5 py-4 border-top bg-white">
     <div class="container small d-flex flex-wrap gap-3 justify-content-between">
-      <span>&copy; {% now "Y" %} Unified Government Platform</span>
-      <span>Built with Django</span>
+      <span>&copy; {% now "Y" %} CivicTrail | Unified Government Platform</span>
+      <!-- <span>Built with Django</span> -->
     </div>
   </footer>
 
