@@ -1,3 +1,9 @@
+ :root { --brand:#0f4c81; }
+    .brand-bg { background: var(--brand); }
+    .brand-text { color: var(--brand); }
+    .card-kpi { border-left: 4px solid var(--brand); }
+    .project-badge { font-size: .75rem; }
+    .sticky-toolbar { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #eee; }
 body {
   background: #fafafa;
   color: #333333;

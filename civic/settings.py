@@ -39,8 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'civictrail.apps.CivictrailConfig',
     'corsheaders',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    # 'rest_framework',
+    # 'rest_framework_simplejwt',
 ]
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,6 +77,11 @@ CORS_ALLOWED_ORIGINS = [
     "exp://127.0.0.1:19000",   # Expo
     "http://127.0.0.1:19006",
 ]
+
+LOGIN_URL = 'login'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 
 ROOT_URLCONF = 'civic.urls'
