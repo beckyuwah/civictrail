@@ -38,6 +38,6 @@ def register_view(request):
 def profile(request):
     return render(request, 'users/profile.html', {'title': 'User Profile'})    
 
-@login_required
+
 def settings(request):
     return render(request, 'users/settings.html')
