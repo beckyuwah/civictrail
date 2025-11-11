@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'civictrail.apps.CivictrailConfig',
+    'users.apps.UsersConfig',
     'corsheaders',
+    'projects.apps.ProjectsConfig',
+    
 ]
 
 MIDDLEWARE = [
