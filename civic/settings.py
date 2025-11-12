@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'civictrail.apps.CivictrailConfig',
-    'corsheaders',
     'users.apps.UsersConfig',
+    'corsheaders',
     'crispy_forms',
     'crispy_bootstrap4',
     # 'rest_framework',
     # 'rest_framework_simplejwt',
+    'projects.apps.ProjectsConfig',
+    
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
