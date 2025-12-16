@@ -10,3 +10,7 @@ __pycache__/
 accessVirt/
 
 aasnipet/
+
+# VS Code or IDE folders
+.vscode/
+.idea/
