@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+# settings.py
+import os
+
+import cities_light
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +50,7 @@ INSTALLED_APPS = [
     # 'rest_framework',
     # 'rest_framework_simplejwt',
     'projects.apps.ProjectsConfig',
+    'cities_light',
     
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
@@ -157,3 +163,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#api settings
+
+API_BASE_URL = 'https://api.countrystatecity.in/v1/countries/{iso2}/states'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+CURL_PATH = '/curl/path'
+API_KEY = os.environ.get('MY_API_KEY')  # Store in environment variables

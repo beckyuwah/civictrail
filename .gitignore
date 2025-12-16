@@ -9,10 +9,4 @@ __pycache__/
 .env
 accessVirt/
 
-# Static files
-staticfiles/
-/static/    
-
-# VS Code or IDE folders
-.vscode/
-.idea/
+aasnipet/
