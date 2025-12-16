@@ -69,11 +69,15 @@ def projects(request):
     # later, load projects from DB and pass context
     return render(request, "civictrail/projects.html", {"title": "Projects"})
 
-def engage(request):
-    return render(request, "civictrail/engage.html", {"title": "Engage"})
+def states(request):
+    # later, load states from DB and pass context
+    return render(request, "civictrail/states.html", {"title": "States"})
 
-def transparency(request):
-    return render(request, "civictrail/transparency.html", {"title": "Transparency"})
+# def engage(request):
+#     return render(request, "civictrail/engage.html", {"title": "Engage"})
+
+# def transparency(request):
+#     return render(request, "civictrail/transparency.html", {"title": "Transparency"})
 
 # Simple authentication page placeholders
 def login_view(request):

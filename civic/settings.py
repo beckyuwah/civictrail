@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+# settings.py
+import os
+
+import cities_light
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,8 +43,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'civictrail.apps.CivictrailConfig',
+    'users.apps.UsersConfig',
     'corsheaders',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    # 'rest_framework',
+    # 'rest_framework_simplejwt',
+    'projects.apps.ProjectsConfig',
+    'cities_light',
+    
 ]
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,6 +85,11 @@ CORS_ALLOWED_ORIGINS = [
     "exp://127.0.0.1:19000",   # Expo
     "http://127.0.0.1:19006",
 ]
+
+LOGIN_URL = 'login'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 
 ROOT_URLCONF = 'civic.urls'
@@ -143,3 +163,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#api settings
+
+API_BASE_URL = 'https://api.countrystatecity.in/v1/countries/{iso2}/states'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+CURL_PATH = '/curl/path'
+API_KEY = os.environ.get('MY_API_KEY')  # Store in environment variables

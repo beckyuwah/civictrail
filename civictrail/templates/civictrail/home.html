@@ -167,8 +167,8 @@
                   <li><strong>Last update:</strong> {{ p.updated_at|date:"M d, Y" }}</li>
                 </ul>
                 <div class="progress mb-2" role="progressbar" aria-label="Progress">
-                  <!-- <div class="progress-bar" style="width: {{ p.progress|default:0 }}%">{{ p.progress|default:0 }}%</div>
-                </div> -->
+                  <div class="progress-bar" style="width: {{ p.progress|default:0 }}%">{{ p.progress|default:0 }}%</div>
+                </div>
                 <div class="d-flex gap-2">
                   <a href="{% url 'project_detail' p.slug %}" class="btn btn-sm btn-outline-primary">View</a>
                   <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#subscribeModal" data-project="{{ p.id }}">Subscribe</button>

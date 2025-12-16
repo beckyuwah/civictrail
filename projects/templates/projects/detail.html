@@ -1,0 +1,14 @@
+{% extends "civic_trail/base.html" %}
+{% block title %}{{ project.title }} · Civic Trail{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2>{{ project.title }}</h2>
+  <p>{{ project.description }}</p>
+  <ul>
+    <li><strong>State:</strong> {{ project.state.name }}</li>
+    <li><strong>Status:</strong> {{ project.status|title }}</li>
+    <li><strong>Budget:</strong> {{ project.budget|default:"N/A" }}</li>
+    <li><strong>Progress:</strong> {{ project.progress }}%</li>
+  </ul>
+</div>
+{% endblock %}

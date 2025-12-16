@@ -20,4 +20,8 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('civictrail.urls')),
+    path("users/", include("users.urls")),
+    path("projects/", include("projects.urls")),
+
+>>>>>>> feature/projects-module
 ]

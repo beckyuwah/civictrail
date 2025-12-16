@@ -1,0 +1,21 @@
+{% extends "civictrail/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Profile · CivicTrail{% endblock %}
+
+{% block content %}
+<div class="content-section">
+
+    <h2 class="mb-4">User Profile</h2>
+
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>State of Origin:</strong> {{ user.state }}</p>
+    <p><strong>City of Residence:</strong> {{ user.city }}</p>
+    <div class="mt-4">
+        <a class="btn btn-outline-info" href="#">Edit Profile</a>
+</div>  
+
+    
+{% endblock content %}
