@@ -22,7 +22,7 @@ urlpatterns = [
     path("feedback/", views.submit_feedback, name="submit_feedback"),
     path("issues/report/", views.report_issue, name="report_issue"),
     path("poll/vote/", views.vote_poll, name="vote_poll"),
-
+    path("offline/", views.offline, name="offline"),
 ]
 
     
