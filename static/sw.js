@@ -2,6 +2,13 @@ const CACHE_NAME = "civictrail-v1";
 const STATIC_ASSETS = [
   "/",
   "/static/manifest.webmanifest",
+  "/static/icons/web-app-manifest-192x192.png",
+  "/static/icons/web-app-manifest-512x512.png",
+  // Add other static assets you want to cache
+  "/static/css/styles.css",
+  "/static/js/main.js",
+  // Add more assets as needed  
+  "/offline/",
 ];
 
 // Install
