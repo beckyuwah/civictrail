@@ -116,3 +116,5 @@ def vote_poll(request):
     # Handle poll voting logic
     return render(request, "civictrail/vote_poll.html", {"title": "Vote in Poll"})   
 
+def offline(request):
+    return render(request, "offline.html")
