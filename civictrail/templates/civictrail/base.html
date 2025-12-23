@@ -8,11 +8,23 @@
   <!-- Bootstrap CSS (CDN) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  <!-- Favicon and PWA manifest -->
+  <!-- PWA manifest -->
+   <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+  <!-- Favicon iOs support-->
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
-  <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="CivicTrail - Unified Government Platform">
+  <meta name="description" content="CivicTrail is a unified platform for government projects and citizen engagement.">
   <meta name="theme-color" content="#0f4c81">
+  <link rel="icon" type="image/png" href="/icon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/icon/favicon.svg" />
+  <link rel="shortcut icon" href="/icon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+  <link rel="manifest" href="/icon/faviconsite.webmanifest" />
   <!-- Custom CSS -->
   <style>
     :root { --brand:#0f4c81; }
