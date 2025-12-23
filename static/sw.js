@@ -1,4 +1,40 @@
 const CACHE_NAME = "civictrail-v1";
+const STATIC_ASSETS = [
+  "/",
+  "/static/manifest.webmanifest",
+];
+
+// Install
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
+  );
+});
+
+// Fetch (NETWORK FIRST for auth)
+self.addEventListener("fetch", event => {
+  const url = new URL(event.request.url);
+
+  // Never cache auth or admin
+  if (
+    url.pathname.startsWith("/login") ||
+    url.pathname.startsWith("/logout") ||
+    url.pathname.startsWith("/admin")
+  ) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        return response;
+      })
+      .catch(() => caches.match(event.request))
+  );
+});
+/* const CACHE_NAME = "civictrail-v1";
 const URLS_TO_CACHE = [
   "/",
   "/login/",
@@ -32,4 +68,4 @@ self.addEventListener("activate", event => {
       );
     })
   );
-});
+}); */
