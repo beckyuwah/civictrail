@@ -54,14 +54,7 @@ jobs:
         uses: azure/login@v1
         with:
           scope: '/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}'
-          # oidc-token: ${{ secrets.AZURE_OIDC_TOKEN }}
-          # Uncomment and set the following if not using GitHub OIDC  
-
-          # client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          # tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          # subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          # client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-
+          
           # Deploy to Azure Web App
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
