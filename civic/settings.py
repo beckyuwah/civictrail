@@ -158,20 +158,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+
+# Static files configuration
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#api settings
-
+# API settings
 API_BASE_URL = 'https://api.countrystatecity.in/v1/countries/{iso2}/states'
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-CURL_PATH = '/curl/path'
 API_KEY = os.environ.get('MY_API_KEY')  # Store in environment variables
+CURL_PATH = '/curl/path'
+CITIES_LIGHT_APP_NAME = 'civictrail'
