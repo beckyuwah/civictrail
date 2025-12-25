@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'crispy_forms',
     'crispy_bootstrap4',
-    # 'rest_framework',
-    # 'rest_framework_simplejwt',
+    'rest_framework',
+    'rest_framework_simplejwt',
     'projects.apps.ProjectsConfig',
     'cities_light',
     
@@ -67,16 +67,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    
-    
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-# INSTALLED_APPS += ["rest_framework", "corsheaders"]
-# MIDDLEWARE = ["corsheaders.middleware.CorsMiddleware", *MIDDLEWARE]
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -86,6 +90,10 @@ CORS_ALLOWED_ORIGINS = [
     "exp://127.0.0.1:19000",   # Expo
     "http://127.0.0.1:19006",
 ]
+CORS_ALLOW_ALL_ORIGINS = True  # dev only
+
+# Mobile-friendly JSON only
+CSRF_TRUSTED_ORIGINS = []
 
 LOGIN_URL = 'login'
 
