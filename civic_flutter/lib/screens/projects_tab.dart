@@ -30,6 +30,38 @@ class _ProjectsTabState extends State<ProjectsTab> {
     });
   }
 
+  Future<void> _confirmDelete(int projectId) async {
+  final confirm = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Delete Project'),
+      content: const Text('Are you sure you want to delete this project?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text(
+            'Delete',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      ],
+    ),
+  );
+
+  if (confirm == true) {
+    await ProjectDao.deleteProject(projectId);
+    loadProjects();
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Project deleted')),
+    );
+  }
+}
   // Compute list of states dynamically
   List<String> get states {
     final stateSet = projects.map((p) => p.state).toSet().toList();
@@ -129,11 +161,21 @@ class _ProjectsTabState extends State<ProjectsTab> {
                         child: ListTile(
                           title: Text(project.name),
                           subtitle: Text(project.description),
-                          trailing: Text(
-                            project.state,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                project.state,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (Session.username == 'admin')
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => _confirmDelete(project.id!),
+                                ),
+                            ],
                           ),
                         ),
                       );
