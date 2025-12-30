@@ -16,6 +16,14 @@ class ProjectDao {
     return result.map((row) => Project.fromMap(row)).toList();
 
   }
+  static Future<void> deleteProject(int id) async {
+    final db = await AppDatabase.database;
+    await db.delete(
+      'projects',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 
   /// Get projects filtered by state
   static Future<List<Project>> getProjectsByState(String state) async {
@@ -26,12 +34,7 @@ class ProjectDao {
       whereArgs: [state],
       orderBy: 'name ASC',
     );
-    return result.map((row) => Project(
-      id: row['id'] as int?,
-      name: row['name'] as String,
-      description: row['description'] as String,
-      state: row['state'] as String,
-    )).toList();
+    return result.map((row) => Project.fromMap(row)).toList();
   }
 
   /// Search projects by name
@@ -50,4 +53,18 @@ class ProjectDao {
       state: row['state'] as String,
     )).toList();
   }
+
+  static Future<List<Project>> getHomeProjects() async {
+    final db = await AppDatabase.database;
+    final result = await db.query(
+      'projects',
+      where: 'show_on_home = ?',
+      whereArgs: [1],
+      orderBy: 'id DESC',
+      limit: 5,
+    );
+
+    return result.map((e) => Project.fromMap(e)).toList();
+  }
+
 }

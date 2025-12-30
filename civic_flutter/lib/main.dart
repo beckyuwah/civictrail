@@ -5,20 +5,38 @@ import 'screens/projects_tab.dart';
 import 'screens/profile_tab.dart';
 import 'package:logging/logging.dart';
 // import 'my_app.dart'; // Your main app
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import '../database/civic_flutter_db.dart';
 
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // needed for async before runApp
+
+  void printTables() async {
+    final db = await AppDatabase.database;
+
+    final users = await db.query('users');
+    final projects = await db.query('projects');
+
+    debugPrint('Users: $users');
+    debugPrint('Projects: $projects');
+  }
+  printTables();
   // Configure global logging
-  Logger.root.level = Level.ALL; // Log all levels
+  Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
-    // Customize output format
     debugPrint(
         '${record.level.name}: ${record.time}: ${record.loggerName}: ${record.message}');
   });
 
+  // Print database path
+  final dbPath = await getDatabasesPath();
+  final path = join(dbPath, 'civictrail.db');
+  debugPrint('SQLite database path: $path');
+
   runApp(const MyApp());
-}
+} 
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
