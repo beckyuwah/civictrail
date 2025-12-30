@@ -3,8 +3,20 @@ import 'screens/home_tab.dart';
 import 'screens/states_tab.dart';
 import 'screens/projects_tab.dart';
 import 'screens/profile_tab.dart';
+import 'package:logging/logging.dart';
+// import 'my_app.dart'; // Your main app
+
 
 void main() {
+  runApp(const MyApp());
+  // Configure global logging
+  Logger.root.level = Level.ALL; // Log all levels
+  Logger.root.onRecord.listen((record) {
+    // Customize output format
+    debugPrint(
+        '${record.level.name}: ${record.time}: ${record.loggerName}: ${record.message}');
+  });
+
   runApp(const MyApp());
 }
 
@@ -33,13 +45,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  late final List<Widget> _tabs;
 
-  final List<Widget> _tabs = [
-    const HomeTab(),
-    const StatesTab(),
-    const ProjectsTab(),
-    const ProfileTab(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+
+    _tabs = [
+      const HomeTab(),
+      const StatesTab(),
+      const ProjectsTab(),
+      ProfileTab(onLoginSuccess: switchToHome)
+    ];
+  }
+
+  void switchToHome() {
+    setState(() {
+      _selectedIndex = 0;
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -80,7 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-       
     );
   }
 }
