@@ -1,0 +1,42 @@
+2) Wrap your Django UI in a native shell (Capacitor/Ionic/Cordova)
+You keep Django templates; the app is a WebView packaged for the stores.
+High-level flow
+Host Django normally (e.g., https://yourapp.com).
+Create a thin native container that points to your URL (or ships local build).
+Use Capacitor plugins if you need camera, file picker, etc.
+
+Steps
+
+1. Create shell project
+    bash code
+        npm create @capacitor/app@latest
+        # Pick "Vanilla JS" if you don't need Ionic UI
+        cd your-capacitor-app
+        npm install
+
+2. Point to your Django URL in capacitor.config.ts:
+ts code
+    server: { url: "https://yourapp.com", cleartext: false }
+
+3. Platform add & build
+bash code
+    npx cap add android
+    npx cap add ios
+    npx cap open android
+    npx cap open ios
+
+4. Auth & CORS
+Prefer token auth/JWT instead of cookies across domains.
+On Django, enable CORS:
+bash code
+    pip install django-cors-headers
+
+    In settings.py:
+    INSTALLED_APPS += ['corsheaders']
+    MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware', *MIDDLEWARE]
+    CORS_ALLOWED_ORIGINS = ["capacitor://localhost", "http://localhost"]
+
+5. Native features
+Use Capacitor plugins (Camera, Filesystem). For uploads, create Django endpoints (see route 3 below).
+Pros: Store presence, quick if UI is ready.
+Cons: Still web UI; performance depends on WebView.
