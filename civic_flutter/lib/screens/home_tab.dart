@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/session.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -8,16 +9,19 @@ class HomeTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('CivicTrail'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
-        actions: const [
-          Icon(Icons.add_box_outlined, size: 28),
-          SizedBox(width: 15),
-          Icon(Icons.favorite_border, size: 28),
-          SizedBox(width: 15),
-          Icon(Icons.share, size: 28),
-          SizedBox(width: 10),
+        actions: [
+          if (Session.isLoggedIn)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Center(
+                child: Text(
+                  Session.username!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
       body: ListView(
@@ -55,4 +59,3 @@ class HomeTab extends StatelessWidget {
     );
   }
 }
-

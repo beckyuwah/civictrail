@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import '../data/projects_data.dart';
+import '../database/project_dao.dart';
+import '../models/project_model.dart';
+import 'project_form_admin.dart';
+import '../services/session.dart';
 
 class ProjectsTab extends StatefulWidget {
   const ProjectsTab({super.key});
@@ -9,24 +12,38 @@ class ProjectsTab extends StatefulWidget {
 }
 
 class _ProjectsTabState extends State<ProjectsTab> {
+  List<Project> projects = [];
   String searchQuery = '';
   String selectedState = 'All';
 
+  @override
+  void initState() {
+    super.initState();
+    loadProjects();
+  }
+
+  Future<void> loadProjects() async {
+    final all = await ProjectDao.getProjects();
+    if (!mounted) return;
+    setState(() {
+      projects = all;
+    });
+  }
+
+  // Compute list of states dynamically
   List<String> get states {
-    final stateSet = allProjects.map((p) => p.state).toSet().toList();
+    final stateSet = projects.map((p) => p.state).toSet().toList();
     stateSet.sort();
     return ['All', ...stateSet];
   }
 
-  List get filteredProjects {
-    return allProjects.where((project) {
-      final matchesSearch = project.name
-          .toLowerCase()
-          .contains(searchQuery.toLowerCase());
-
+  // Filter projects based on search and selected state
+  List<Project> get filteredProjects {
+    return projects.where((p) {
+      final matchesSearch =
+          p.name.toLowerCase().contains(searchQuery.toLowerCase());
       final matchesState =
-          selectedState == 'All' || project.state == selectedState;
-
+          selectedState == 'All' || p.state == selectedState;
       return matchesSearch && matchesState;
     }).toList();
   }
@@ -34,10 +51,27 @@ class _ProjectsTabState extends State<ProjectsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('All Projects')),
+      appBar: AppBar(
+        title: const Text('All Projects'),
+        actions: [
+          // Show Add Project button only for admin
+          if (Session.isLoggedIn && Session.username == 'admin')
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const AddProjectForm(),
+                  ),
+                );
+                loadProjects(); // Refresh projects after adding
+              },
+            ),
+        ],
+      ),
       body: Column(
         children: [
-          // 🔍 Search box
+          // Search box
           Padding(
             padding: const EdgeInsets.all(10),
             child: TextField(
@@ -54,7 +88,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
             ),
           ),
 
-          // 🗂 State filter
+          // State filter dropdown
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: DropdownButtonFormField<String>(
@@ -81,7 +115,7 @@ class _ProjectsTabState extends State<ProjectsTab> {
 
           const SizedBox(height: 10),
 
-          // 📋 Project list
+          // Project list
           Expanded(
             child: filteredProjects.isEmpty
                 ? const Center(child: Text('No projects found'))
@@ -89,7 +123,6 @@ class _ProjectsTabState extends State<ProjectsTab> {
                     itemCount: filteredProjects.length,
                     itemBuilder: (context, index) {
                       final project = filteredProjects[index];
-
                       return Card(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
