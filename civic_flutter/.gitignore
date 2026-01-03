@@ -50,6 +50,7 @@ db.sqlite3
 #myfiles
 aasnipet/
 civic_RN-flutter/
+admin_projects_screen.dart
 
 # Environment and compiled files
 *.pyc

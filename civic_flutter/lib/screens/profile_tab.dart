@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../database/user_dao.dart';
+import '../screens/admin_projects_screen.dart';
 import '../services/session.dart';
+
 
 class ProfileTab extends StatefulWidget {
   final VoidCallback onLoginSuccess;
@@ -40,7 +42,7 @@ class _ProfileTabState extends State<ProfileTab> {
           );
           return;
         }
-
+        
         Session.login(
           id: user.id!,
           name: user.username,
@@ -175,6 +177,21 @@ class _ProfileTabState extends State<ProfileTab> {
                             : "Already have an account? Login",
                       ),
                     ),
+                    // if (Session.isAdmin) ...[
+                    //     const SizedBox(height: 20),
+                    //     ElevatedButton.icon(
+                    //       icon: const Icon(Icons.admin_panel_settings),
+                    //       label: const Text('Admin: Manage Projects'),
+                    //       onPressed: () {
+                    //         Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (_) => const AdminProjectsScreen(),
+                    //           ),
+                    //         );
+                    //       },
+                    //     ),
+                    //   ],
                   ],
                 ),
               ),

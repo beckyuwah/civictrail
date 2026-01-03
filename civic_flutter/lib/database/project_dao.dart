@@ -7,6 +7,7 @@ class ProjectDao {
   static Future<int> addProject(Project project) async {
     final db = await AppDatabase.database;
     return db.insert('projects', project.toMap());
+    
   }
 
   /// Get all projects from the database
@@ -16,14 +17,21 @@ class ProjectDao {
     return result.map((row) => Project.fromMap(row)).toList();
 
   }
-  static Future<void> deleteProject(int id) async {
+  static Future<int> updateProject(Project project) async {
     final db = await AppDatabase.database;
-    await db.delete(
+    return db.update(
       'projects',
+      project.toMap(),
       where: 'id = ?',
-      whereArgs: [id],
+      whereArgs: [project.id],
     );
   }
+
+  static Future<int> deleteProject(int id) async {
+    final db = await AppDatabase.database;
+    return db.delete('projects', where: 'id = ?', whereArgs: [id]);
+  }
+
 
   /// Get projects filtered by state
   static Future<List<Project>> getProjectsByState(String state) async {
@@ -45,13 +53,9 @@ class ProjectDao {
       where: 'name LIKE ?',
       whereArgs: ['%$query%'],
       orderBy: 'name ASC',
-    );
-    return result.map((row) => Project(
-      id: row['id'] as int?,
-      name: row['name'] as String,
-      description: row['description'] as String,
-      state: row['state'] as String,
-    )).toList();
+    );  
+    return result.map<Project>((row) => Project.fromMap(row)).toList();
+
   }
 
   static Future<List<Project>> getHomeProjects() async {
@@ -64,7 +68,8 @@ class ProjectDao {
       limit: 5,
     );
 
-    return result.map((e) => Project.fromMap(e)).toList();
+    // return result.map((e) => Project.fromMap(e)).toList();
+    return result.map((row) => Project.fromMap(row)).toList();
   }
 
 }
