@@ -15,13 +15,16 @@ class _AddProjectFormState extends State<AddProjectForm> {
   String description = '';
   String stateName = '';
 
-  Future<void> submit() async {
+  bool showOnHome = false; 
+
+  Future<void> saveProject() async {
     if (!_formKey.currentState!.validate()) return;
 
     await ProjectDao.addProject(Project(
       name: title,
       description: description,
       state: stateName,
+      showOnHome: showOnHome,
     ));
 
     if (!mounted) return;
@@ -62,10 +65,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: submit,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                ),
+                onPressed: saveProject,
                 child: const Text('Add Project'),
               ),
             ],

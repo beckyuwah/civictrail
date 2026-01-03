@@ -19,7 +19,7 @@ class AppDatabase {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
     );
   }
@@ -39,18 +39,25 @@ class AppDatabase {
     // Projects table
     await db.execute('''
       CREATE TABLE projects(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT NOT NULL,
-        state TEXT NOT NULL
-      )
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          description TEXT NOT NULL,
+          state TEXT NOT NULL,
+          show_on_home INTEGER NOT NULL DEFAULT 0
+        )
+
     ''');
 
     // Insert default admin user
-    // await db.insert('users', {
-    //   'username': 'admin',
-    //   'email': 'admin@gmail.com',
-    //   'password': '123456', // store hashed in production
-    // });
+    await db.insert('users', {
+      'username': 'admin',
+      'email': 'admin@gmail.com',
+      'password': '123456', // store hashed in production
+    });
+    await db.insert('users', {
+      'username': 'becks',
+      'email': 'becks@gmail.com',
+      'password': '123456', // store hashed in production
+    });
   }
 }

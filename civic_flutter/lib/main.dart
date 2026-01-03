@@ -12,17 +12,21 @@ import '../database/civic_flutter_db.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // needed for async before runApp
+  final db = await AppDatabase.database;
+  final tables = await db.rawQuery(
+    "PRAGMA table_info(projects)"
+  );
+  debugPrint(tables.toString());
+  // void printTables() async {
+  //   final db = await AppDatabase.database;
 
-  void printTables() async {
-    final db = await AppDatabase.database;
+  //   final users = await db.query('users');
+  //   final projects = await db.query('projects');
 
-    final users = await db.query('users');
-    final projects = await db.query('projects');
-
-    debugPrint('Users: $users');
-    debugPrint('Projects: $projects');
-  }
-  printTables();
+  //   debugPrint('Users: $users');
+  //   debugPrint('Projects: $projects');
+  // }
+  // printTables();
   // Configure global logging
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
