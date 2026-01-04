@@ -1,46 +1,17 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'screens/home_tab.dart';
 import 'screens/states_tab.dart';
 import 'screens/projects_tab.dart';
 import 'screens/profile_tab.dart';
-import 'package:logging/logging.dart';
-// import 'my_app.dart'; // Your main app
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-import '../database/civic_flutter_db.dart';
 
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // needed for async before runApp
-  final db = await AppDatabase.database;
-  final tables = await db.rawQuery(
-    "PRAGMA table_info(projects)"
-  );
-  debugPrint(tables.toString());
-  // void printTables() async {
-  //   final db = await AppDatabase.database;
-
-  //   final users = await db.query('users');
-  //   final projects = await db.query('projects');
-
-  //   debugPrint('Users: $users');
-  //   debugPrint('Projects: $projects');
-  // }
-  // printTables();
-  // Configure global logging
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((record) {
-    debugPrint(
-        '${record.level.name}: ${record.time}: ${record.loggerName}: ${record.message}');
-  });
-
-  // Print database path
-  final dbPath = await getDatabasesPath();
-  final path = join(dbPath, 'civictrail.db');
-  debugPrint('SQLite database path: $path');
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
 
   runApp(const MyApp());
-} 
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,8 +19,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'CivicTrail',
       debugShowCheckedModeBanner: false,
-      title: 'civictrail',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -67,17 +38,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+
   late final List<Widget> _tabs;
 
   @override
   void initState() {
     super.initState();
-
     _tabs = [
       const HomeTab(),
       const StatesTab(),
       const ProjectsTab(),
-      ProfileTab(onLoginSuccess: switchToHome)
+      ProfileTab(onLoginSuccess: switchToHome),
     ];
   }
 

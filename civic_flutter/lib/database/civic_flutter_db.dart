@@ -1,8 +1,7 @@
 // lib/database/app_database.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/user.dart';
-import '../models/project_model.dart';
+
 
 class AppDatabase {
   static Database? _database;
