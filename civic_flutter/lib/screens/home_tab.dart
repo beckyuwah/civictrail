@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../screens/admin_projects_screen.dart';
 import '../services/session.dart';
 import '../database/project_dao.dart';
 import '../models/project_model.dart';
@@ -118,7 +117,7 @@ class _NewsCarousel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         gradient: LinearGradient(
                           colors: [
-                            Colors.black.withOpacity(0.6),
+                            Colors.black.withOpacity(0.6 ),
                             Colors.transparent,
                           ],
                           begin: Alignment.bottomCenter,

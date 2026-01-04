@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../database/user_dao.dart';
-import '../screens/admin_projects_screen.dart';
 import '../services/session.dart';
 
 
