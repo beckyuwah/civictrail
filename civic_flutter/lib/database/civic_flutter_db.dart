@@ -1,10 +1,9 @@
-// lib/database/app_database.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-
 class AppDatabase {
   static Database? _database;
+  static const int _dbVersion = 1;
 
   static Future<Database> get database async {
     if (_database != null) return _database!;
@@ -13,50 +12,43 @@ class AppDatabase {
   }
 
   static Future<Database> _initDB() async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'civictrail.db');
+    final path = join(await getDatabasesPath(), 'civic.db');
 
-    return await openDatabase(
+    return openDatabase(
       path,
-      version: 2,
-      onCreate: _onCreate,
+      version: _dbVersion,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT,
+            email TEXT,
+            password TEXT,
+            location TEXT,
+            is_admin INTEGER DEFAULT 0
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE projects (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            description TEXT,
+            state TEXT,
+            show_on_home INTEGER
+          )
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(
+            'ALTER TABLE users ADD COLUMN location TEXT',
+          );
+          await db.execute(
+            'ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0',
+          );
+        }
+      },
     );
-  }
-
-  /// Create tables
-  static Future _onCreate(Database db, int version) async {
-    // Users table
-    await db.execute('''
-      CREATE TABLE users(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
-      )
-    ''');
-
-    // Projects table
-    await db.execute('''
-      CREATE TABLE projects(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          description TEXT NOT NULL,
-          state TEXT NOT NULL,
-          show_on_home INTEGER NOT NULL DEFAULT 0
-        )
-
-    ''');
-
-    // Insert default admin user
-    await db.insert('users', {
-      'username': 'admin',
-      'email': 'admin@gmail.com',
-      'password': '123456', // store hashed in production
-    });
-    await db.insert('users', {
-      'username': 'becks',
-      'email': 'becks@gmail.com',
-      'password': '123456', // store hashed in production
-    });
   }
 }

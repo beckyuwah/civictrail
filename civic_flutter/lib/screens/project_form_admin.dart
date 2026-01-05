@@ -60,9 +60,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
       debugPrint('Error fetching states: $e');
     } finally {
       if (mounted) {
-        setState(() {
-          loadingStates = false;
-        });
+        setState(() => loadingStates = false);
       }
     }
   }
@@ -78,16 +76,23 @@ class _AddProjectFormState extends State<AddProjectForm> {
       showOnHome: showOnHome,
     );
 
-    await ProjectDao.addProject(newProject);
+    try {
+      await ProjectDao.addProject(newProject);
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Project added successfully')),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Project added successfully')),
+      );
 
-    _formKey.currentState!.reset();
-    stateName = '';
+      // Close the form to return to ProjectsTab
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding project: $e')),
+      );
+    }
   }
 
   @override
@@ -102,7 +107,11 @@ class _AddProjectFormState extends State<AddProjectForm> {
             children: [
               // Title
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.title),
+                ),
                 onChanged: (val) => title = val,
                 validator: (val) => val!.isEmpty ? 'Title required' : null,
               ),
@@ -110,10 +119,15 @@ class _AddProjectFormState extends State<AddProjectForm> {
 
               // Description
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(
+                  labelText: 'Description',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.description),
+                ),
                 onChanged: (val) => description = val,
                 validator: (val) =>
                     val!.isEmpty ? 'Description required' : null,
+                maxLines: 3,
               ),
               const SizedBox(height: 16),
 
@@ -124,17 +138,17 @@ class _AddProjectFormState extends State<AddProjectForm> {
                       child: CircularProgressIndicator(),
                     )
                   : Autocomplete<String>(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
+                      optionsBuilder: (textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        }
                         return apiStates.where((state) => state
                             .toLowerCase()
                             .contains(textEditingValue.text.toLowerCase()));
                       },
-                      onSelected: (selection) {
-                        stateName = selection;
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onFieldSubmitted) {
+                      onSelected: (selection) => stateName = selection,
+                      fieldViewBuilder: (context, controller, focusNode,
+                          onFieldSubmitted) {
                         return TextFormField(
                           controller: controller,
                           focusNode: focusNode,
@@ -142,6 +156,7 @@ class _AddProjectFormState extends State<AddProjectForm> {
                             labelText: 'State',
                             hintText: 'Start typing state name',
                             border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.map),
                           ),
                           validator: (val) =>
                               val == null || val.isEmpty ? 'State required' : null,
@@ -149,12 +164,31 @@ class _AddProjectFormState extends State<AddProjectForm> {
                         );
                       },
                     ),
+              const SizedBox(height: 16),
+
+              // Show on Home checkbox
+              CheckboxListTile(
+                title: const Text('Show on Home Page'),
+                value: showOnHome,
+                onChanged: (val) {
+                  setState(() => showOnHome = val ?? false);
+                },
+              ),
+
               const SizedBox(height: 24),
 
               // Submit button
-              ElevatedButton(
-                onPressed: saveProject,
-                child: const Text('Add Project'),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: const Text(
+                    'Add Project',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  onPressed: saveProject,
+                ),
               ),
             ],
           ),

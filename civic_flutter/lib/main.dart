@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const HomeTab(),
       const StatesTab(),
       const ProjectsTab(),
-      ProfileTab(onLoginSuccess: switchToHome),
+      const ProfileTab(),
     ];
   }
 
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
+        unselectedItemColor: const Color.fromARGB(255, 15, 15, 15),
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(

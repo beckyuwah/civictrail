@@ -1,22 +1,32 @@
-// lib/database/project_dao.dart
 import 'civic_flutter_db.dart';
 import '../models/project_model.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ProjectDao {
   /// Add a project to the database
   static Future<int> addProject(Project project) async {
     final db = await AppDatabase.database;
-    return db.insert('projects', project.toMap());
-    
+
+    // Insert project into DB
+    return db.insert(
+      'projects',
+      project.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   /// Get all projects from the database
   static Future<List<Project>> getProjects() async {
     final db = await AppDatabase.database;
-    final result = await db.query('projects', orderBy: 'name ASC');
-    return result.map((row) => Project.fromMap(row)).toList();
+    final result = await db.query(
+      'projects',
+      orderBy: 'id DESC',
+    );
 
+    return result.map((row) => Project.fromMap(row)).toList();
   }
+
+  /// Update an existing project
   static Future<int> updateProject(Project project) async {
     final db = await AppDatabase.database;
     return db.update(
@@ -27,11 +37,15 @@ class ProjectDao {
     );
   }
 
+  /// Delete a project
   static Future<int> deleteProject(int id) async {
     final db = await AppDatabase.database;
-    return db.delete('projects', where: 'id = ?', whereArgs: [id]);
+    return db.delete(
+      'projects',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
-
 
   /// Get projects filtered by state
   static Future<List<Project>> getProjectsByState(String state) async {
@@ -53,23 +67,21 @@ class ProjectDao {
       where: 'name LIKE ?',
       whereArgs: ['%$query%'],
       orderBy: 'name ASC',
-    );  
-    return result.map<Project>((row) => Project.fromMap(row)).toList();
-
+    );
+    return result.map((row) => Project.fromMap(row)).toList();
   }
 
+  /// Get projects flagged to show on home page (max 5)
   static Future<List<Project>> getHomeProjects() async {
     final db = await AppDatabase.database;
     final result = await db.query(
       'projects',
       where: 'show_on_home = ?',
-      whereArgs: [1],
+      whereArgs: [1], // 1 = true
       orderBy: 'id DESC',
       limit: 5,
     );
 
-    // return result.map((e) => Project.fromMap(e)).toList();
     return result.map((row) => Project.fromMap(row)).toList();
   }
-
 }
