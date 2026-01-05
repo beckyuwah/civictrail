@@ -33,16 +33,21 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: 
+        // Colors.grey.shade100,
+        const Color.fromARGB(255, 198, 177, 229),
       appBar: AppBar(
         title: const Text('CivicTrail'),
         elevation: 0,
+        backgroundColor: 
+        // Colors.grey.shade100,
+        const Color.fromARGB(255, 157, 111, 225),
         actions: [
           if (Session.isLoggedIn)
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: Center(
-                child: Text(Session.username!,
+                child: Text(Session.currentUser!.username,
                     style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
             ),
@@ -117,7 +122,7 @@ class _NewsCarousel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         gradient: LinearGradient(
                           colors: [
-                            Colors.black.withOpacity(0.6 ),
+                            Colors.black.withValues(alpha: 0.8),
                             Colors.transparent,
                           ],
                           begin: Alignment.bottomCenter,

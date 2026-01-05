@@ -17,12 +17,7 @@ class UserDao {
     );
 
     if (result.isNotEmpty) {
-      return User(
-        id: result.first['id'] as int,
-        username: result.first['username'] as String,
-        email: result.first['email'] as String,
-        password: result.first['password'] as String,
-      );
+      return User.fromMap(result.first);
     }
     return null;
   }

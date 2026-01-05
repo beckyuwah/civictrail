@@ -1,33 +1,18 @@
-// lib/services/session.dart
-import 'package:logging/logging.dart';
+import '../models/user.dart';
 
 class Session {
-  static int? userId;
-  static String? username;
+  static User? _currentUser;
 
-  /// Logger instance
-  static final Logger _logger = Logger('Session');
+  static User? get currentUser => _currentUser;
 
-  /// Returns true if a user is logged in
-  static bool get isLoggedIn => userId != null;
+  static bool get isLoggedIn => _currentUser != null;
+  static bool get isAdmin => _currentUser?.isAdmin ?? false;
 
-  /// Returns true if the current user is admin
-  static bool get isAdmin => username?.toLowerCase() == 'admin';
-
-  /// Log in the user
-  static void login({
-    required int id,
-    required String name,
-  }) {
-    userId = id;
-    username = name;
-    _logger.info('User $username logged in with id $userId');
+  static void login(User user) {
+    _currentUser = user;
   }
 
-  /// Log out the current user
   static void logout() {
-    _logger.info('User $username logged out');
-    userId = null;
-    username = null;
+    _currentUser = null;
   }
 }
