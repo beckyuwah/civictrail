@@ -1,15 +1,21 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+
+
 import 'screens/home_tab.dart';
 import 'screens/states_tab.dart';
 import 'screens/projects_tab.dart';
 import 'screens/profile_tab.dart';
 
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
 
+
+  
   runApp(const MyApp());
 }
 
@@ -22,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'CivicTrail',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
       ),
       home: const HomeScreen(),
     );
@@ -37,7 +43,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _currentIndex = 0;
+
 
   late final List<Widget> _tabs;
 
@@ -48,29 +55,31 @@ class _HomeScreenState extends State<HomeScreen> {
       const HomeTab(),
       const StatesTab(),
       const ProjectsTab(),
-      const ProfileTab(),
+      ProfileTab(
+        onLoginSuccess: switchToHome,
+      ),
     ];
   }
 
   void switchToHome() {
     setState(() {
-      _selectedIndex = 0;
+      _currentIndex = 0;
     });
   }
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _tabs[_selectedIndex],
+      body: _tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
+        currentIndex: _currentIndex,
         selectedItemColor: Colors.blue,
         unselectedItemColor: const Color.fromARGB(255, 15, 15, 15),
         onTap: _onItemTapped,
