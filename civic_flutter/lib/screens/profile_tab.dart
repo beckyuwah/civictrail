@@ -5,7 +5,9 @@ import '../services/session.dart';
 import 'projects_tab.dart';
 
 class ProfileTab extends StatefulWidget {
-  const ProfileTab({super.key});
+  final VoidCallback? onLoginSuccess;
+
+  const ProfileTab({super.key, this.onLoginSuccess});
 
   @override
   State<ProfileTab> createState() => _ProfileTabState();
@@ -31,7 +33,13 @@ class _ProfileTabState extends State<ProfileTab> {
       }
 
       Session.login(user);
-      setState(() {});
+
+      // Redirect to Home tab after login
+      if (widget.onLoginSuccess != null) {
+        widget.onLoginSuccess!();
+      }
+
+      setState(() {}); // Refresh ProfileTab to show user info
     } else {
       await UserDao.registerUser(
         User(
@@ -42,7 +50,7 @@ class _ProfileTabState extends State<ProfileTab> {
         ),
       );
       _snack('Registration successful');
-      setState(() => isLogin = true);
+      setState(() => isLogin = true); // Switch to login view after registration
     }
   }
 
@@ -65,7 +73,7 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
-  //  AUTH VIEW 
+  //  AUTH VIEW
   Widget _authView() {
     return Center(
       child: SingleChildScrollView(
@@ -90,22 +98,14 @@ class _ProfileTabState extends State<ProfileTab> {
                     ),
                   ),
                   const SizedBox(height: 25),
-
                   if (!isLogin)
-                    _field('Username', Icons.person,
-                        (v) => username = v),
-
-                  if (!isLogin)
-                    _field('Location', Icons.location_on,
-                        (v) => location = v),
-
+                    _field('Username', Icons.person, (v) => username = v),
                   _field('Email', Icons.email, (v) => email = v),
-                  _field('Password', Icons.lock,
-                      (v) => password = v,
+                  if (!isLogin)
+                    _field('Location', Icons.location_on, (v) => location = v),
+                  _field('Password', Icons.lock, (v) => password = v,
                       obscure: true),
-
                   const SizedBox(height: 20),
-
                   ElevatedButton(
                     onPressed: submit,
                     style: ElevatedButton.styleFrom(
@@ -116,10 +116,8 @@ class _ProfileTabState extends State<ProfileTab> {
                     ),
                     child: Text(isLogin ? 'Login' : 'Register'),
                   ),
-
                   TextButton(
-                    onPressed: () =>
-                        setState(() => isLogin = !isLogin),
+                    onPressed: () => setState(() => isLogin = !isLogin),
                     child: Text(
                       isLogin
                           ? "Don't have an account? Register"
@@ -135,7 +133,7 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
-  //  PROFILE VIEW 
+  //  PROFILE VIEW
   Widget _profileView(BuildContext context) {
     final user = Session.currentUser!;
 
@@ -148,8 +146,7 @@ class _ProfileTabState extends State<ProfileTab> {
               gradient: LinearGradient(
                 colors: [Color(0xff667eea), Color(0xff764ba2)],
               ),
-              borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(30)),
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
             ),
             child: Column(
               children: [
@@ -186,7 +183,7 @@ class _ProfileTabState extends State<ProfileTab> {
           const SizedBox(height: 25),
           _infoTile(Icons.location_on, 'Location', user.location),
 
-          // ADMIN CONTROLS 
+          // ADMIN CONTROLS
           if (Session.isAdmin)
             Card(
               margin: const EdgeInsets.all(16),

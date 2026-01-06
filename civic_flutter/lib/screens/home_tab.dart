@@ -22,7 +22,8 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Future<void> loadHomeProjects() async {
-    final projects = await ProjectDao.getHomeProjects(); // projects where show_on_home = 1
+    final projects =
+        await ProjectDao.getHomeProjects(); // projects where show_on_home = 1
     if (!mounted) return;
     setState(() {
       homeProjects = projects;
@@ -33,15 +34,15 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: 
-        // Colors.grey.shade100,
-        const Color.fromARGB(255, 198, 177, 229),
+      backgroundColor:
+          // Colors.grey.shade100,
+          const Color.fromARGB(255, 198, 177, 229),
       appBar: AppBar(
         title: const Text('CivicTrail'),
         elevation: 0,
-        backgroundColor: 
-        // Colors.grey.shade100,
-        const Color.fromARGB(255, 157, 111, 225),
+        backgroundColor:
+            // Colors.grey.shade100,
+            const Color.fromARGB(255, 157, 111, 225),
         actions: [
           if (Session.isLoggedIn)
             Padding(
@@ -82,9 +83,27 @@ class _HomeTabState extends State<HomeTab> {
   }
 }
 
-
-class _NewsCarousel extends StatelessWidget {
+class _NewsCarousel extends StatefulWidget {
   const _NewsCarousel();
+
+  @override
+  State<_NewsCarousel> createState() => _NewsCarouselState();
+}
+
+class _NewsCarouselState extends State<_NewsCarousel> {
+  final PageController _controller =
+      PageController(viewportFraction: 0.9);
+
+  int _currentPage = 0;
+  final int _pageCount = 3;
+
+  void _goToPage(int page) {
+    _controller.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,64 +115,110 @@ class _NewsCarousel extends StatelessWidget {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
+
         SizedBox(
           height: 180,
-          child: PageView.builder(
-            itemCount: 3,
-            controller: PageController(viewportFraction: 0.9),
-            itemBuilder: (context, index) {
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                margin: const EdgeInsets.only(right: 12),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    ClipRRect(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              PageView.builder(
+                controller: _controller,
+                itemCount: _pageCount,
+                onPageChanged: (index) {
+                  setState(() => _currentPage = index);
+                },
+                itemBuilder: (context, index) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        'https://picsum.photos/600/300?random=$index',
-                        fit: BoxFit.cover,
-                      ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.black.withValues(alpha: 0.8),
-                            Colors.transparent,
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          'Admin Approved Civic Update',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    margin: const EdgeInsets.only(right: 12),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            'https://picsum.photos/600/300?random=$index',
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.black.withOpacity(0.8),
+                                Colors.transparent,
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              'Admin Approved Civic Update',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
+
+              /// ◀ Left Chevron
+              Positioned(
+                left: 0,
+                child: IconButton(
+                  iconSize: 32,
+                  icon: const Icon(Icons.chevron_left),
+                  color: _currentPage == 0
+                      ? Colors.grey
+                      : Colors.white,
+                  onPressed: _currentPage == 0
+                      ? null
+                      : () => _goToPage(_currentPage - 1),
                 ),
-              );
-            },
+              ),
+
+              /// ▶ Right Chevron
+              Positioned(
+                right: 0,
+                child: IconButton(
+                  iconSize: 32,
+                  icon: const Icon(Icons.chevron_right),
+                  color: _currentPage == _pageCount - 1
+                      ? Colors.grey
+                      : Colors.white,
+                  onPressed: _currentPage == _pageCount - 1
+                      ? null
+                      : () => _goToPage(_currentPage + 1),
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
+
 
 class _LatestProjects extends StatelessWidget {
   final List<Project> projects;
@@ -164,6 +229,7 @@ class _LatestProjects extends StatelessWidget {
     required this.loading,
   });
 
+  @override
   @override
   Widget build(BuildContext context) {
     if (loading) {
@@ -182,14 +248,43 @@ class _LatestProjects extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
-        ...projects.map(
-          (project) => Card(
-            child: ListTile(
-              title: Text(project.name),
-              subtitle: Text(project.description),
-              trailing: Text(project.state),
-            ),
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final itemWidth = (constraints.maxWidth - 12) / 2;
+
+            return Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: projects.map((project) {
+                return SizedBox(
+                  width: itemWidth, // 👈 forces 2 columns
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            project.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(project.description),
+                          const SizedBox(height: 12),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(project.state),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            );
+          },
         ),
       ],
     );
@@ -279,3 +374,5 @@ class _EngageCard extends StatelessWidget {
     );
   }
 }
+
+  
