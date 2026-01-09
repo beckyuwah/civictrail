@@ -4,8 +4,17 @@ import '../models/project_model.dart';
 import 'project_form_admin.dart';
 import '../services/session.dart';
 
+// class ProjectsTab extends StatefulWidget {
+
+//   const ProjectsTab({super.key});
+
+//   @override
+//   State<ProjectsTab> createState() => _ProjectsTabState();
+// }
 class ProjectsTab extends StatefulWidget {
-  const ProjectsTab({super.key});
+  final List<Project>? testProjects;
+
+  const ProjectsTab({super.key, this.testProjects});
 
   @override
   State<ProjectsTab> createState() => _ProjectsTabState();
@@ -24,14 +33,22 @@ class _ProjectsTabState extends State<ProjectsTab> {
   }
 
   Future<void> loadProjects() async {
-    setState(() => loading = true);
-    final all = await ProjectDao.getProjects();
-    if (!mounted) return;
-    setState(() {
-      projects = all;
-      loading = false;
-    });
+  setState(() => loading = true);
+  List<Project> all;
+
+  // Use testProjects if provided, otherwise load from DB
+  if (widget.testProjects != null) {
+    all = widget.testProjects!;
+  } else {
+    all = await ProjectDao.getProjects();
   }
+
+  if (!mounted) return;
+  setState(() {
+    projects = all;
+    loading = false;
+  });
+}
 
   Future<void> _confirmDelete(Project project) async {
     final confirm = await showDialog<bool>(

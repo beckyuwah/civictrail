@@ -15,9 +15,10 @@ Future<void> main() async {
   await dotenv.load();
 
 
-  
-  runApp(const MyApp());
+
+  runApp(MyApp());
 }
+// Access your API key safely
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

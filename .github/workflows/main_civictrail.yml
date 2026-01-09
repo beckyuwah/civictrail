@@ -1,4 +1,4 @@
-name: Django CI + Deploy to Azure
+name: CivicTrail CI/CD Pipeline
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   id-token: write
   contents: read
     
-  #CI Job to build and test the Django application
+  #CI Job to build and test the application
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,6 +19,52 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # Set up Flutter environment
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.35.7'
+        channel: 'stable'
+        cache: false
+        
+    - name: Flutter version check
+      run: |
+        flutter --version
+        dart --version
+
+    - name: Create .env for CI
+      working-directory: civic_flutter
+      run: |
+        echo "API_URL=${{ secrets.API_URL }}" > .env
+        echo "API_KEY=${{ secrets.API_KEY }}" >> .env
+
+    - name: Flutter pub get
+      working-directory: civic_flutter
+      run: |
+        flutter pub get
+    
+    - name: Flutter analyze
+      working-directory: civic_flutter
+      run: flutter analyze
+
+    - name: Flutter tests
+      working-directory: civic_flutter
+      run: |
+        flutter test
+
+    - name: Build Flutter APK
+      working-directory: civic_flutter
+      run: |
+        flutter build apk --release
+
+    - name: Upload Flutter APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: flutter-apk
+        path: civic_flutter/build/app/outputs/flutter-apk/app-release.apk
+
+
+      # Set up Python environment
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -39,9 +85,9 @@ jobs:
 
     - name: Collect static files
       run: |
-        python manage.py collectstatic --noinput 
-        
-  #CD job to deploy after build is successful
+        python manage.py collectstatic --noinput
+            
+  #CD job to deploy the application to Azure
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -57,10 +103,10 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          # client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
         # Deploy to Azure Web App
-      - name: Deploy to Azure Web App
+      - name: Deploy Django to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'civictrail'
