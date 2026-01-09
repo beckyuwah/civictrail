@@ -32,12 +32,7 @@ jobs:
         flutter --version
         dart --version
 
-    - name: Create .env for CI
-      working-directory: civic_flutter
-      run: |
-        echo "API_URL=${{ secrets.API_URL }}" > .env
-        echo "API_KEY=${{ secrets.API_KEY }}" >> .env
-
+ 
     - name: Flutter pub get
       working-directory: civic_flutter
       run: |
@@ -82,7 +77,7 @@ jobs:
     - name: Run tests
       run: |
         python manage.py test
-        
+
     - name: Collect static files
       run: |
         python manage.py collectstatic --noinput
