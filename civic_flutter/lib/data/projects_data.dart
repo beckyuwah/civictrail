@@ -1,6 +1,13 @@
 import '../models/project_model.dart';
 
 final List<Project> allProjects = [
+  //Akwa Ibom
+
+  Project(
+    name: 'Arise Park',
+    description: 'Construction of a state-of-the-art recreational park in Uyo.',
+    state: 'Akwa Ibom',
+  ),
   // Lagos
   Project(
     name: 'Lagos Rail Line',
@@ -55,4 +62,5 @@ final List<Project> allProjects = [
     description: 'Expansion of Kaduna International Airport.',
     state: 'Kaduna',
   ),
+
 ];
