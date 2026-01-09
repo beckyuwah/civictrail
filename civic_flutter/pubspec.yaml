@@ -34,7 +34,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    # - .env  
+    - .env  
 
 dependency_overrides: 
   path: ^1.9.1

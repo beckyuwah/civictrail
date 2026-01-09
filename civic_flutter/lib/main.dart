@@ -14,21 +14,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
 
-  final apiKey = dotenv.env['API_KEY'];
-  final apiUrl = dotenv.env['API_URL'];
 
-  runApp(MyApp(
-    apiUrl: apiUrl,
-    apiKey: apiKey,
-    ));
+
+  runApp(MyApp());
 }
 // Access your API key safely
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.apiUrl, required this.apiKey});
-
-  final String? apiUrl;
-  final String? apiKey;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
