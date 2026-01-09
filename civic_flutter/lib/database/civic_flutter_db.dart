@@ -51,4 +51,34 @@ class AppDatabase {
       },
     );
   }
+/// ======================
+  /// Testing Helpers
+  /// ======================
+
+  /// Create a fresh in-memory database for tests
+  static Future<Database> testInstance() async {
+    final db = await openDatabase(inMemoryDatabasePath, version: _dbVersion,
+        onCreate: (db, version) async {
+      // Create only the tables needed for testing
+      await db.execute('''
+        CREATE TABLE projects (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          description TEXT,
+          state TEXT,
+          show_on_home INTEGER
+        )
+      ''');
+    });
+    _database = db; // So ProjectDao uses this DB during tests
+    return db;
+  }
+
+  /// Close the database (for cleanup in tests)
+  static Future<void> closeDatabase() async {
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
+  }
 }
