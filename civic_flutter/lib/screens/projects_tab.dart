@@ -14,7 +14,7 @@ import '../services/session.dart';
 class ProjectsTab extends StatefulWidget {
   final List<Project>? testProjects;
 
-  const ProjectsTab({Key? key, this.testProjects}) : super(key: key);
+  const ProjectsTab({super.key, this.testProjects});
 
   @override
   State<ProjectsTab> createState() => _ProjectsTabState();
