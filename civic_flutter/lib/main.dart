@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.apiUrl, required this.apiKey});
 
   final String? apiUrl;
-  final String apiKey;
+  final String? apiKey;
 
   @override
   Widget build(BuildContext context) {
