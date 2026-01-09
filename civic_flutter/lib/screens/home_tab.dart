@@ -148,7 +148,7 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                             borderRadius: BorderRadius.circular(16),
                             gradient: LinearGradient(
                               colors: [
-                                Colors.black.withOpacity(0.8),
+                                Colors.black.withValues(alpha: 0.8),
                                 Colors.transparent,
                               ],
                               begin: Alignment.bottomCenter,
