@@ -13,8 +13,8 @@ dependencies:
   flutter_svg: ^2.0.7
   google_fonts: ^5.0.0
   webview_flutter: ^4.0.7
-  sqflite: ^2.4.2
-  path: ^1.9.0
+  sqflite: ^2.3.3+1
+  path: ^1.9.1
   logging: ^1.2.0
   flutter_dotenv: 5.0.2
   intl: ^0.18.1
@@ -33,4 +33,7 @@ flutter:
   uses-material-design: true
   assets:
     - .env      
+
+dependency_overrides: 
+  path: ^1.9.1
     
