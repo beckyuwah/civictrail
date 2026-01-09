@@ -32,6 +32,21 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+*.apk
+*.aab
+*.app
+*.dill
+*.framework
+*.ipa
+*.jks
+*.keystore
+*.lock
+*.xcarchive
+*.xcconfig
+*.xcodeproj/
+*.xcworkspace/
+.packages
+generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
