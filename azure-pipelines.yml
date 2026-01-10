@@ -1,0 +1,21 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: |
+    echo "Cloning GitHub repo..."
+    git clone --mirror https://github.com/beckyuwah/civictrail.git
+
+    cd civictrail.git
+
+    echo "Pushing mirror to Azure Repos..."
+    git push --mirror https://$(AZURE_USER):$(AZURE_PAT)@dev.azure.com/rebeccauwah/CivicTrail/_git/CivicTrail
+  displayName: Mirror GitHub → Azure Repos
