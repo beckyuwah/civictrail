@@ -35,6 +35,7 @@ flutter:
   uses-material-design: true
   assets:
     - .env  
+    - assets/images/
 
 dependency_overrides: 
   path: ^1.9.1

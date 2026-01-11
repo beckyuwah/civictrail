@@ -64,3 +64,25 @@ final List<Project> allProjects = [
   ),
 
 ];
+
+// Predefined featured projects
+final List<Project> featuredProjects = [
+  Project(
+    name: 'Arise Park',
+    description: 'Construction of a state-of-the-art recreational park in Uyo.',
+    state: 'Akwa Ibom',
+    showOnHome: true,
+  ),
+  Project(
+    name: 'Lekki Deep Sea Port',
+    description: 'Construction of a world-class deep sea port.',
+    state: 'Lagos',
+    showOnHome: true,
+  ),
+  Project(
+    name: 'Port Harcourt Flyover',
+    description: 'New flyover to ease traffic congestion.',
+    state: 'Rivers',
+    showOnHome: true,
+  ),
+];

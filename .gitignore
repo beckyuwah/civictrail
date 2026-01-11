@@ -5,6 +5,51 @@ db.sqlite3
 aasnipet/
 civic_RN-flutter/
 
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Local database
+db.sqlite3
+
+#myfiles
+aasnipet/
+civic_RN-flutter/
+admin_projects_screen.dart
+
 # Environment and compiled files
 *.pyc
 __pycache__/
