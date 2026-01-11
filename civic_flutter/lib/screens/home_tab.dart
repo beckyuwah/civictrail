@@ -91,8 +91,7 @@ class _NewsCarousel extends StatefulWidget {
 }
 
 class _NewsCarouselState extends State<_NewsCarousel> {
-  final PageController _controller =
-      PageController(viewportFraction: 0.9);
+  final PageController _controller = PageController(viewportFraction: 0.9);
 
   int _currentPage = 0;
   final int _pageCount = 3;
@@ -115,7 +114,6 @@ class _NewsCarouselState extends State<_NewsCarousel> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
-
         SizedBox(
           height: 180,
           child: Stack(
@@ -141,6 +139,31 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                           child: Image.network(
                             'https://picsum.photos/600/300?random=$index',
                             fit: BoxFit.cover,
+
+                            // Shows loader while image is downloading
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const SizedBox(
+                                height: 200,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            },
+
+                            // Shows fallback instead of blank screen
+                            errorBuilder: (context, error, stackTrace) {
+                              return const SizedBox(
+                                height: 200,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Container(
@@ -161,7 +184,7 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                           child: Align(
                             alignment: Alignment.bottomLeft,
                             child: Text(
-                              'Admin Approved Civic Update',
+                              'Project Update',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -182,9 +205,7 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                 child: IconButton(
                   iconSize: 32,
                   icon: const Icon(Icons.chevron_left),
-                  color: _currentPage == 0
-                      ? Colors.grey
-                      : Colors.white,
+                  color: _currentPage == 0 ? Colors.grey : Colors.white,
                   onPressed: _currentPage == 0
                       ? null
                       : () => _goToPage(_currentPage - 1),
@@ -218,7 +239,6 @@ class _NewsCarouselState extends State<_NewsCarousel> {
     super.dispose();
   }
 }
-
 
 class _LatestProjects extends StatelessWidget {
   final List<Project> projects;
@@ -257,7 +277,7 @@ class _LatestProjects extends StatelessWidget {
               runSpacing: 12,
               children: projects.map((project) {
                 return SizedBox(
-                  width: itemWidth, // 👈 forces 2 columns
+                  width: itemWidth, // forces 2 columns
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -374,5 +394,3 @@ class _EngageCard extends StatelessWidget {
     );
   }
 }
-
-  

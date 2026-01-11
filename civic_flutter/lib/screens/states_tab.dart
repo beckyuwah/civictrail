@@ -24,7 +24,7 @@ class _StatesTabState extends State<StatesTab> {
   }
 
   Future<void> fetchStates() async {
-    final apiKey = dotenv.env['API_KEY'];
+    final apiKey = dotenv.env['API_KEY']?.trim();
 
     if (apiKey == null || apiKey.isEmpty) {
       setState(() {
@@ -57,14 +57,24 @@ class _StatesTabState extends State<StatesTab> {
     }
   }
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('States')),
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : error != null
-              ? Center(child: Text(error!))
+              ? Center(
+                child: Padding(
+                padding:  EdgeInsets.all(16),
+                  child: Text(error!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 16,
+                    )
+                  )
+                )
+              )
               : ListView.builder(
                   itemCount: states.length,
                   itemBuilder: (context, index) {
