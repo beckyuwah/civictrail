@@ -1,7 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 
-
+import '../data/projects_data.dart';
 import 'screens/home_tab.dart';
 import 'screens/states_tab.dart';
 import 'screens/projects_tab.dart';
@@ -12,9 +12,7 @@ import 'screens/profile_tab.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load();
-
-
+  await dotenv.load(fileName: ".env");
 
   runApp(MyApp());
 }
@@ -54,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _tabs = [
       const HomeTab(),
       const StatesTab(),
-      const ProjectsTab(),
+      ProjectsTab(testProjects: allProjects,),
       ProfileTab(
         onLoginSuccess: switchToHome,
       ),
