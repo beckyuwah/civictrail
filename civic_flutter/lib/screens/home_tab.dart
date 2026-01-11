@@ -100,7 +100,7 @@ class _NewsCarousel extends StatefulWidget {
 class _NewsCarouselState extends State<_NewsCarousel> {
   final PageController _controller = PageController(viewportFraction: 0.9);
 
-  int _currentPage = 0;
+  final _currentPage = 0;
   // final int _pageCount = 3;
 
     final List<Map<String, String>> _carouselItems = [
