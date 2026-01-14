@@ -1,9 +1,10 @@
-# civictrail
+# Civictrail
 A unified app developed to integrate state and federal government projects, enhancing transparency and citizen awareness and engagement in Nigeria
 
 CivicTrail is a multi-application repository containing a Django backend and a Flutter mobile/web application, managed under a single codebase with unified CI/CD using GitHub Actions and deployment to Azure Web Apps.
 
 ## Repository Structure
+```text
 .
 ├── civic/                 # Django project configuration
 │   ├── settings.py
@@ -33,7 +34,7 @@ CivicTrail is a multi-application repository containing a Django backend and a F
 │   └── ci-cd.yml
 └── README.md
 
-
+```
 
 ---
 
