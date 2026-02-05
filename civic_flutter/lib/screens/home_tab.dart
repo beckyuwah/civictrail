@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../services/session.dart';
 import '../database/project_dao.dart';
 import '../models/project_model.dart';
+import '../data/projects_data.dart';
+
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -22,11 +24,16 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Future<void> loadHomeProjects() async {
-    final projects =
-        await ProjectDao.getHomeProjects(); // projects where show_on_home = 1
+    final dbProjects = await ProjectDao.getHomeProjects(); // from DB
     if (!mounted) return;
+
+    // Merge with predefined projects for UAT if DB is empty
+    final projectsToShow = dbProjects.isNotEmpty
+        ? dbProjects
+        : featuredProjects; // <-- use your predefined list here
+
     setState(() {
-      homeProjects = projects;
+      homeProjects = projectsToShow;
       loading = false;
     });
   }
@@ -36,13 +43,13 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
       backgroundColor:
           // Colors.grey.shade100,
-          const Color.fromARGB(255, 198, 177, 229),
+          const Color.fromARGB(255, 37, 30, 48),
       appBar: AppBar(
         title: const Text('CivicTrail'),
         elevation: 0,
         backgroundColor:
             // Colors.grey.shade100,
-            const Color.fromARGB(255, 157, 111, 225),
+            const Color.fromARGB(255, 163, 140, 198),
         actions: [
           if (Session.isLoggedIn)
             Padding(
@@ -93,8 +100,23 @@ class _NewsCarousel extends StatefulWidget {
 class _NewsCarouselState extends State<_NewsCarousel> {
   final PageController _controller = PageController(viewportFraction: 0.9);
 
-  int _currentPage = 0;
-  final int _pageCount = 3;
+  final _currentPage = 0;
+  // final int _pageCount = 3;
+
+    final List<Map<String, String>> _carouselItems = [
+      {
+        'image': 'assets/images/arisepark.png',
+        'text': "Nigeria's new face of tourism",
+      },
+      {
+        'image': 'assets/images/lekki-deep-seaport.png',
+        'text': 'Lagos Rail Project reaches Phase 2',
+      },
+      {
+        'image': 'assets/images/ph-flyover.png',
+        'text': 'Rehabilitation completed',
+      },
+   ];
 
   void _goToPage(int page) {
     _controller.animateToPage(
@@ -109,9 +131,9 @@ class _NewsCarouselState extends State<_NewsCarousel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'News & Updates',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 12),
         SizedBox(
@@ -121,11 +143,12 @@ class _NewsCarouselState extends State<_NewsCarousel> {
             children: [
               PageView.builder(
                 controller: _controller,
-                itemCount: _pageCount,
-                onPageChanged: (index) {
-                  setState(() => _currentPage = index);
-                },
+                itemCount: _carouselItems.length,
+                // onPageChanged: (index) {
+                //   setState(() => _currentPage = index);
+                // },
                 itemBuilder: (context, index) {
+                  final item =_carouselItems[index];
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -136,34 +159,10 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            'https://picsum.photos/600/300?random=$index',
+                          child: Image.asset(
+                            item['image']!,
                             fit: BoxFit.cover,
-
-                            // Shows loader while image is downloading
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const SizedBox(
-                                height: 200,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            },
-
-                            // Shows fallback instead of blank screen
-                            errorBuilder: (context, error, stackTrace) {
-                              return const SizedBox(
-                                height: 200,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.broken_image,
-                                    size: 40,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              );
-                            },
+                            height: 200,
                           ),
                         ),
                         Container(
@@ -179,12 +178,12 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                             ),
                           ),
                         ),
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.all(12),
                           child: Align(
                             alignment: Alignment.bottomLeft,
                             child: Text(
-                              'Project Update',
+                              item['text']!,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -199,7 +198,7 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                 },
               ),
 
-              /// ◀ Left Chevron
+              //Left Chevron
               Positioned(
                 left: 0,
                 child: IconButton(
@@ -212,16 +211,16 @@ class _NewsCarouselState extends State<_NewsCarousel> {
                 ),
               ),
 
-              /// ▶ Right Chevron
+              //Right Chevron
               Positioned(
                 right: 0,
                 child: IconButton(
                   iconSize: 32,
                   icon: const Icon(Icons.chevron_right),
-                  color: _currentPage == _pageCount - 1
+                  color: _currentPage == _carouselItems.length - 1
                       ? Colors.grey
                       : Colors.white,
-                  onPressed: _currentPage == _pageCount - 1
+                  onPressed: _currentPage == _carouselItems.length - 1
                       ? null
                       : () => _goToPage(_currentPage + 1),
                 ),
@@ -265,7 +264,7 @@ class _LatestProjects extends StatelessWidget {
       children: [
         const Text(
           'Latest Projects',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 12),
         LayoutBuilder(
@@ -321,7 +320,7 @@ class _EngageSection extends StatelessWidget {
       children: [
         const Text(
           'Engage',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 12),
         Row(
