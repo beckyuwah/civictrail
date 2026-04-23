@@ -4,37 +4,35 @@ A unified app developed to integrate state and federal government projects, enha
 CivicTrail is a multi-application repository containing a Django backend and a Flutter mobile/web application, managed under a single codebase with unified CI/CD using GitHub Actions and deployment to Azure Web Apps.
 
 ## Repository Structure
-```text
-.
-├── civic/                 # Django project configuration
-│   ├── settings.py
-│   ├── urls.py
-│   ├── asgi.py
-│   └── wsgi.py
-│
-├── civictrail/          # Django app (frontend/API components)
-│   ├── migrations/
-│   ├── static/
-│   ├── templates/
-│   ├── models.py
-│   ├── views.py
-│   └── urls.py
-├── civic_flutter/              # Flutter mobile + web application
-│   ├── lib/                    # Flutter source code
-│   ├── android/                # Android platform files
-│   ├── ios/                    # iOS platform files
-│   ├── web/                    # Flutter web support
-│   ├── pubspec.yaml
-│   └── analysis_options.yaml
-│
-├── manage.py                   # Django entry point
-├── requirements.txt            # Django dependencies
-├── db.sqlite3                  # Local development database
-├── .github/workflows/           # GitHub Actions CI/CD workflows
-│   └── ci-cd.yml
-└── README.md
 
-```
+- **civic/** – Django project configuration  
+  - settings.py  
+  - urls.py  
+  - asgi.py  
+  - wsgi.py  
+
+- **civictrail/** – Django app (frontend/API components)  
+  - migrations/  
+  - static/  
+  - templates/  
+  - models.py  
+  - views.py  
+  - urls.py  
+
+- **civic_flutter/** – Flutter mobile + web application  
+  - lib/  
+  - android/  
+  - ios/  
+  - web/  
+  - pubspec.yaml  
+  - analysis_options.yaml  
+
+- manage.py – Django entry point  
+- requirements.txt – Django dependencies  
+- db.sqlite3 – Local development database  
+- .github/workflows/ – CI/CD workflows  
+  - ci-cd.yml  
+- README.md
 
 ---
 
